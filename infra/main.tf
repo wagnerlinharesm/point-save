@@ -19,7 +19,7 @@ locals {
   point_db_secrets = jsondecode(data.aws_secretsmanager_secret_version.point_db_secretsmanager_secret_version.secret_string)
 }
 
-resource "aws_lambda_function" "point_report_lambda_function" {
+resource "aws_lambda_function" "point_save_lambda_function" {
   function_name = "point_save"
   handler       = "app/lambda_function.handler"
   runtime       = "python3.11"

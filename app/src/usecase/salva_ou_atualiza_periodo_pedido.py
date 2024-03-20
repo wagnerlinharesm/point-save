@@ -28,5 +28,5 @@ def execute(id_ponto, conn) -> None:
             conn
         )
 
-    horas_trabalhadas = calcular_horas_trabalhadas(periodo_ponto, conn)
+    horas_trabalhadas = calcular_horas_trabalhadas(id_ponto, conn)
     atualizar_ponto(id_ponto, horas_trabalhadas, conn)

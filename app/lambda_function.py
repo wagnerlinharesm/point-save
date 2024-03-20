@@ -1,5 +1,7 @@
 import logging
 import os
+import json
+import jwt
 
 import psycopg2
 
@@ -22,7 +24,7 @@ password = os.getenv('DB_PASSWORD')
 def handler(event, context):
     logging.info('Iniciando a execução da função lambda.')
 
-    id_funcionario = event['id_funcionario']
+    id_funcionario = get_username(event)
 
     conn = connection()
 
@@ -42,6 +44,28 @@ def handler(event, context):
         return {"result": "Erro ao salvar ponto."}
 
     return {"result": "Ponto salvo com sucesso."}
+
+
+def get_username(event):
+    try:
+        token = event['headers'].get('Authorization', '').split(' ')[1]
+        token_payload = jwt.decode(token, options={"verify_signature": False})
+        username = token_payload.get('cognito:username')
+
+        if not username:
+            raise ValueError('Username not found in token')
+
+        return username
+    except jwt.DecodeError:
+        return {
+            'statusCode': 400,
+            'body': json.dumps({'error': 'Invalid token'})
+        }
+    except ValueError as e:
+        return {
+            'statusCode': 400,
+            'body': json.dumps({'error': str(e)})
+        }
 
 
 def connection():

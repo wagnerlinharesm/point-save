@@ -1,1 +1,2 @@
+pyjwt
 psycopg2-binary

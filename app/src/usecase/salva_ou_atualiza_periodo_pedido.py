@@ -15,7 +15,7 @@ def execute(id_ponto, situacao_pontos, now, conn) -> None:
 
     if periodo_ponto:
         situacao = next(filter(lambda situacao_ponto: situacao_ponto.descricao == 'FECHADO', situacao_pontos))
-        periodo_ponto.horario_saida = datetime.now().time()
+        periodo_ponto.horario_saida = now.time()
         atualizar_periodo_ponto(periodo_ponto, now, conn)
     else:
         situacao = next(filter(lambda situacao_ponto: situacao_ponto.descricao == 'ABERTO', situacao_pontos))

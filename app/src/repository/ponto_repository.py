@@ -37,21 +37,21 @@ def salvar(ponto, conn):
 
 def atualizar(id_ponto, horas_trabalhadas, id_situacao_ponto, conn):
     logging.info('f=atualizar_ponto, m=iniciando processo para atualizar ponto')
-    logging.info(f'horas_trabalhadas={horas_trabalhadas}, id_situacao_ponto={id_situacao_ponto} id_ponto={id_ponto}')
 
-    sql = """
-    UPDATE ponto
-    SET horas_trabalhadas = %s, id_situacao_ponto = %s
-    WHERE id_ponto = %S
-    """
+    if horas_trabalhadas is not None:
+        sql = """
+        UPDATE ponto
+        SET horas_trabalhadas = %s, id_situacao_ponto = %s
+        WHERE id_ponto = %S
+        """
 
-    cursor = conn.cursor()
+        cursor = conn.cursor()
 
-    cursor.execute(sql, (horas_trabalhadas, id_situacao_ponto, id_ponto,))
+        cursor.execute(sql, (horas_trabalhadas, id_situacao_ponto, id_ponto,))
 
-    conn.commit()
+        conn.commit()
 
-    logging.info(f'f=atualizar_ponto, m=ponto atualizado com sucesso')
+        logging.info(f'f=atualizar_ponto, m=ponto atualizado com sucesso')
 
 
 def buscar(id_funcionario, now, conn):

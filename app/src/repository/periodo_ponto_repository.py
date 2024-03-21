@@ -31,9 +31,15 @@ def atualizar(periodo_ponto, now, conn):
     datetime_entrada = datetime.combine(now, periodo_ponto.horario_entrada)
     datetime_saida = datetime.combine(now, periodo_ponto.horario_saida)
 
+    logging.info(f'datetime_entrada={datetime_entrada}, datetime_saida={datetime_saida}')
+
     diferenca = datetime_saida - datetime_entrada
 
+    logging.info(f'diferenca={diferenca}')
+
     horas_periodo = (diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
+
+    logging.info(f'horas_periodo={horas_periodo}')
 
     sql = """
     UPDATE periodo_ponto

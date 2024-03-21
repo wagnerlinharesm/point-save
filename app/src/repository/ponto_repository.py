@@ -1,6 +1,8 @@
 import logging
-
 from datetime import datetime
+
+from psycopg2.sql import Identifier, SQL
+
 from app.src.entity.ponto import Ponto
 
 
@@ -9,20 +11,26 @@ def salvar(ponto, conn):
 
     data_formatada = ponto.data.strftime('%Y-%m-%d')
 
-    sql_insert = """
-    INSERT INTO ponto (id_funcionario, id_situacao_ponto, data, horas_trabalhadas)
-    VALUES (%s, %s, %s, %s)
-    """
-
-    sql_select = """
-    SELECT * FROM ponto WHERE id_funcionario = %s AND data = %s
-    """
+    sql_insert = SQL("INSERT INTO {} VALUES (%s)").format(Identifier('ponto')), (
+        ponto.id_funcionario,
+        ponto.id_situacao_ponto,
+        data_formatada,
+        ponto.horas_trabalhadas,
+    )
 
     cursor = conn.cursor()
 
-    cursor.execute(sql_insert, (ponto.id_funcionario, ponto.id_situacao_ponto, data_formatada, ponto.horas_trabalhadas))
+    cursor.execute(sql_insert)
 
     conn.commit()
+
+    sql_select = SQL("SELECT * FROM {} WHERE {} = %s AND {} = %s").format(
+        Identifier('ponto'),
+        Identifier('id_funcionario'),
+        Identifier('data')
+    ), (
+        ponto.id_funcionario, data_formatada,
+    )
 
     cursor.execute(sql_select, (ponto.id_funcionario, data_formatada,))
     ponto_data = cursor.fetchone()
@@ -43,7 +51,7 @@ def atualizar(id_ponto, horas_trabalhadas, conn):
 
     cursor = conn.cursor()
 
-    cursor.execute(sql, (horas_trabalhadas,id_ponto,))
+    cursor.execute(sql, (horas_trabalhadas, id_ponto,))
 
     conn.commit()
 

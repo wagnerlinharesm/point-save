@@ -25,7 +25,7 @@ def execute(id_ponto, situacao_pontos, now, conn) -> None:
                 id_ponto,
                 datetime.now().time(),
                 None,
-                0
+                datetime.now().time()
             ),
             conn
         )

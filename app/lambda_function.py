@@ -2,9 +2,11 @@ import logging
 import os
 import json
 import jwt
+import pytz
 
 import psycopg2
 
+from datetime import datetime
 from app.src.repository.ponto_repository import (
     buscar as buscar_ponto,
 )
@@ -20,6 +22,8 @@ dbname = os.getenv('DB_NAME')
 username = os.getenv('DB_USER')
 password = os.getenv('DB_PASSWORD')
 
+pytz.timezone('America/Sao_Paulo')
+
 
 def handler(event, context):
     logging.info('Iniciando a execução da função lambda')
@@ -28,14 +32,16 @@ def handler(event, context):
 
     conn = connection()
 
+    now = datetime.now(pytz.timezone('America/Sao_Paulo'))
+
     try:
         situacao_pontos = busca_situacao_pontos(conn)
-        ponto = buscar_ponto(id_funcionario, conn)
+        ponto = buscar_ponto(id_funcionario, now, conn)
 
         if not ponto:
-            salva_ponto_com_primeiro_periodo(id_funcionario, situacao_pontos, conn)
+            salva_ponto_com_primeiro_periodo(id_funcionario, situacao_pontos, now, conn)
         else:
-            salva_ou_atualiza_periodo_pedido(ponto.id_ponto, situacao_pontos, conn)
+            salva_ou_atualiza_periodo_pedido(ponto.id_ponto, situacao_pontos, now, conn)
 
         conn.cursor().close()
         conn.close()

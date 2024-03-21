@@ -3,8 +3,6 @@ import logging
 
 from datetime import datetime
 
-from psycopg2.sql import Identifier, SQL
-
 from app.src.entity.ponto import Ponto
 
 
@@ -27,15 +25,9 @@ def salvar(ponto, conn):
 
     conn.commit()
 
-    logging.info('select')
-
-    sql_select = SQL("SELECT * FROM {} WHERE {} = %s AND {} = %s").format(
-        Identifier('ponto'),
-        Identifier('id_funcionario'),
-        Identifier('data')
-    ), (
-        ponto.id_funcionario, data_formatada,
-    )
+    sql_select = """
+        SELECT * FROM ponto WHERE id_funcionario = %s AND data = %s
+        """
 
     cursor.execute(sql_select, (ponto.id_funcionario, data_formatada,))
     ponto_data = cursor.fetchone()
@@ -63,10 +55,10 @@ def atualizar(id_ponto, horas_trabalhadas, id_situacao_ponto, conn):
     logging.info(f'f=atualizar_ponto, m=ponto atualizado com sucesso')
 
 
-def buscar(id_funcionario, conn):
+def buscar(id_funcionario, now, conn):
     logging.info('f=buscar_ponto, m=inciando a verificação para ver se existe ponto já criado.')
 
-    data_formatada = datetime.now().strftime('%Y-%m-%d')
+    data_formatada = now.strftime('%Y-%m-%d')
 
     logging.info(f'id_funcionario={id_funcionario} data_formatada={data_formatada}')
 

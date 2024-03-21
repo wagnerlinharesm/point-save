@@ -29,8 +29,8 @@ def handler(event, context):
     conn = connection()
 
     try:
-        ponto = buscar_ponto(id_funcionario, conn)
         situacao_pontos = busca_situacao_pontos(conn)
+        ponto = buscar_ponto(id_funcionario, conn)
 
         if not ponto:
             salva_ponto_com_primeiro_periodo(id_funcionario, situacao_pontos, conn)

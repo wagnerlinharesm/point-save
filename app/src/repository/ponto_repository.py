@@ -59,7 +59,7 @@ def buscar(id_funcionario, conn):
 
     cursor = conn.cursor()
 
-    cursor.execute(sql, (id_funcionario, data_formatada,))
+    cursor.execute(sql, (id_funcionario, data_formatada))
     ponto_data = cursor.fetchone()
 
     if ponto_data:

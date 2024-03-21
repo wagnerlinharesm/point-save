@@ -13,13 +13,15 @@ logger.setLevel(logging.INFO)
 def execute(id_funcionario, situacao_pontos, conn) -> None:
     situacao = next(filter(lambda situacao_ponto: situacao_ponto.descricao == 'ABERTO', situacao_pontos))
 
+    time_only = datetime.now().time()
+
     ponto = salvar_ponto(
         Ponto(
             None,
             id_funcionario,
             situacao.id_situacao_ponto,
             datetime.now(),
-            0
+            time_only
         ),
         conn
     )
@@ -28,9 +30,9 @@ def execute(id_funcionario, situacao_pontos, conn) -> None:
         PeriodoPonto(
             None,
             ponto.id_ponto,
-            datetime.now(),
+            time_only,
             None,
-            0
+            None
         ),
         conn
     )

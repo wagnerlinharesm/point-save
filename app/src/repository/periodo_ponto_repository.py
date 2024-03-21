@@ -84,7 +84,7 @@ def buscar(id_ponto, conn):
 
 
 def calcular_horas_trabalhadas(id_ponto, now, conn):
-    sql = """SELECT hora_entrada, hora_saida FROM periodo_ponto WHERE id_ponto = %s AND hora_saida 
+    sql = """SELECT * FROM periodo_ponto WHERE id_ponto = %s AND hora_saida 
     IS NOT NULL"""
 
     cursor = conn.cursor()
@@ -98,11 +98,9 @@ def calcular_horas_trabalhadas(id_ponto, now, conn):
     logging.info(f'horas_trabalhadas_data={horas_trabalhadas_data[0]}')
 
     for horas_trabalhada_data in horas_trabalhadas_data:
-        logging.info(f'hora_entrada={horas_trabalhada_data.hora_entrada}, hora_saida={horas_trabalhada_data.hora_saida}')
-
-        if horas_trabalhadas_data[1] is not None:
-            datetime_entrada = datetime.combine(now, horas_trabalhada_data[0])
-            datetime_saida = datetime.combine(now, horas_trabalhada_data[1])
+        if horas_trabalhadas_data[3] is not None:
+            datetime_entrada = datetime.combine(now, horas_trabalhada_data[2])
+            datetime_saida = datetime.combine(now, horas_trabalhada_data[3])
 
             logging.info(f'datetime_entrada={datetime_entrada}, datetime_saida={datetime_saida}')
 
@@ -113,7 +111,7 @@ def calcular_horas_trabalhadas(id_ponto, now, conn):
             if total_horas_trabalhadas is None:
                 total_horas_trabalhadas = horas_periodo
             else:
-                total_horas_trabalhadas = (
+                total_horas_trabalhadas = time(
                     total_horas_trabalhadas[0] + horas_periodo[0],
                     total_horas_trabalhadas[1] + horas_periodo[1],
                     total_horas_trabalhadas[2] + horas_periodo[2]

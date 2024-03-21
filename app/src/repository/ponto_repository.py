@@ -1,8 +1,6 @@
 import json
 import logging
 
-from datetime import datetime
-
 from app.src.entity.ponto import Ponto
 
 
@@ -33,7 +31,7 @@ def salvar(ponto, conn):
     ponto_data = cursor.fetchone()
     ponto.id_ponto = ponto_data[0]
 
-    logging.info(f'f=salvar_ponto, m=ponto salvo com sucesso {json.dumps(ponto.__dict__)}')
+    logging.info(f'f=salvar_ponto, m=ponto salvo com sucesso')
     return ponto
 
 
@@ -72,7 +70,7 @@ def buscar(id_funcionario, now, conn):
     if ponto_data:
         ponto = Ponto(ponto_data[0], ponto_data[1], ponto_data[2], ponto_data[3], ponto_data[4])
 
-        logging.info(f'f=buscar_ponto, m=ponto encontrado {json.dumps(ponto.__dict__)}')
+        logging.info(f'f=buscar_ponto, m=ponto encontrado')
 
         return ponto
 

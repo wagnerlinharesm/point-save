@@ -1,7 +1,6 @@
-import json
 import logging
 
-from datetime import datetime, date
+from datetime import datetime
 from app.src.entity.periodo_ponto import PeriodoPonto
 
 
@@ -15,8 +14,7 @@ def salvar(periodo_ponto, conn):
 
     cursor = conn.cursor()
 
-    cursor.execute(sql, (periodo_ponto.id_periodo_ponto,
-                         periodo_ponto.id_ponto,
+    cursor.execute(sql, (periodo_ponto.id_ponto,
                          periodo_ponto.horario_entrada,
                          periodo_ponto.horario_saida,
                          periodo_ponto.horas_periodo,))

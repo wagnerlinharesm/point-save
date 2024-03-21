@@ -59,8 +59,6 @@ def buscar(id_funcionario, now, conn):
 
     data_formatada = now.strftime('%Y-%m-%d')
 
-    logging.info(f'id_funcionario={id_funcionario} data_formatada={data_formatada}')
-
     sql = """SELECT * FROM ponto WHERE id_funcionario = %s AND data = %s"""
 
     cursor = conn.cursor()

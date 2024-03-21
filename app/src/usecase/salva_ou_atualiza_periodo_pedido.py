@@ -10,14 +10,16 @@ from app.src.repository.periodo_ponto_repository import (
 from app.src.repository.ponto_repository import atualizar as atualizar_ponto
 
 
-def execute(id_ponto, conn) -> None:
+def execute(id_ponto, situacao_pontos, conn) -> None:
     periodo_ponto = buscar_periodo_ponto_aberto(id_ponto, conn)
 
     if periodo_ponto:
+        situacao = next(filter(lambda situacao_ponto: situacao_ponto.descricao == 'FECHADO', situacao_pontos))
         periodo_ponto.horario_saida = datetime.now()
         atualizar_periodo_ponto(periodo_ponto, conn)
     else:
-        periodo_ponto = salvar_periodo_ponto(
+        situacao = next(filter(lambda situacao_ponto: situacao_ponto.descricao == 'ABERTO', situacao_pontos))
+        salvar_periodo_ponto(
             PeriodoPonto(
                 None,
                 id_ponto,
@@ -29,4 +31,4 @@ def execute(id_ponto, conn) -> None:
         )
 
     horas_trabalhadas = calcular_horas_trabalhadas(id_ponto, conn)
-    atualizar_ponto(id_ponto, horas_trabalhadas, conn)
+    atualizar_ponto(id_ponto, horas_trabalhadas, situacao.id_situacao_ponto, conn)

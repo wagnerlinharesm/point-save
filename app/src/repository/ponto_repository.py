@@ -11,18 +11,17 @@ def salvar(ponto, conn):
 
     data_formatada = ponto.data.strftime('%Y-%m-%d')
 
-    logging.info(f'ponto={ponto.id_funcionario} id_situacao_ponto={ponto.id_situacao_ponto} data_formatada={data_formatada} horas_trabalhadas={ponto.horas_trabalhadas}.')
+    logging.info(f'ponto={ponto.id_funcionario} id_situacao_ponto={ponto.id_situacao_ponto} '
+                 f'data_formatada={data_formatada} horas_trabalhadas={ponto.horas_trabalhadas}.')
 
-    sql_insert = SQL("INSERT INTO {} VALUES (%s)").format(Identifier('ponto')), (
-        ponto.id_funcionario,
-        ponto.id_situacao_ponto,
-        data_formatada,
-        ponto.horas_trabalhadas,
-    )
+    sql_insert = """
+        INSERT INTO ponto (id_funcionario, id_situacao_ponto, data, horas_trabalhadas)
+        VALUES (%s, %s, %s, %s)
+        """
 
     cursor = conn.cursor()
 
-    cursor.execute(sql_insert)
+    cursor.execute(sql_insert, (ponto.id_funcionario, ponto.id_situacao_ponto, data_formatada, ponto.horas_trabalhadas,))
 
     conn.commit()
 
@@ -44,18 +43,18 @@ def salvar(ponto, conn):
     return ponto
 
 
-def atualizar(id_ponto, horas_trabalhadas, conn):
+def atualizar(id_ponto, horas_trabalhadas, id_situacao_ponto, conn):
     logging.info('f=atualizar_ponto, m=iniciando processo para atualizar ponto.')
 
     sql = """
     UPDATE ponto
-    SET horas_trabalhadas = %s
+    SET horas_trabalhadas = %s, id_situacao_ponto = %s
     WHERE id_ponto = %S
     """
 
     cursor = conn.cursor()
 
-    cursor.execute(sql, (horas_trabalhadas, id_ponto,))
+    cursor.execute(sql, (horas_trabalhadas, id_situacao_ponto, id_ponto,))
 
     conn.commit()
 

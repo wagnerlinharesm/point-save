@@ -35,7 +35,7 @@ def handler(event, context):
         if not ponto:
             salva_ponto_com_primeiro_periodo(id_funcionario, situacao_pontos, conn)
         else:
-            salva_ou_atualiza_periodo_pedido(ponto.id_ponto, conn)
+            salva_ou_atualiza_periodo_pedido(ponto.id_ponto, situacao_pontos, conn)
 
         conn.cursor().close()
         conn.close()

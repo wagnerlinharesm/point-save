@@ -22,7 +22,7 @@ password = os.getenv('DB_PASSWORD')
 
 
 def handler(event, context):
-    logging.info('Iniciando a execução da função lambda.')
+    logging.info('Iniciando a execução da função lambda')
 
     id_funcionario = get_username(event)
 
@@ -41,9 +41,9 @@ def handler(event, context):
         conn.close()
     except Exception as e:
         logging.error(f'Erro ao salvar ponto: {e}')
-        return {"result": "Erro ao salvar ponto."}
+        return {"result": "Erro ao salvar ponto"}
 
-    return {"result": "Ponto salvo com sucesso."}
+    return {"result": "Ponto salvo com sucesso"}
 
 
 def get_username(event):

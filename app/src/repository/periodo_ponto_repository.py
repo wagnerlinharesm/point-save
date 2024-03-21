@@ -1,3 +1,4 @@
+import json
 import logging
 
 from datetime import datetime
@@ -5,7 +6,7 @@ from app.src.entity.periodo_ponto import PeriodoPonto
 
 
 def salvar(periodo_ponto, conn):
-    logging.info('f=salvar_periodo_ponto, m=iniciando processo para salvar periodo ponto.')
+    logging.info('f=salvar_periodo_ponto, m=iniciando processo para salvar periodo ponto')
 
     sql = """
     INSERT INTO periodo_ponto (id_ponto, horario_entrada, horario_saida, horas_periodo)
@@ -22,12 +23,12 @@ def salvar(periodo_ponto, conn):
 
     conn.commit()
 
-    logging.info(f'f=salvar_periodo_ponto, m=periodo ponto salvo com sucesso {periodo_ponto}.')
+    logging.info(f'f=salvar_periodo_ponto, m=periodo ponto salvo com sucesso {json.dumps(periodo_ponto.__dict__)}')
     return periodo_ponto
 
 
 def atualizar(periodo_ponto, conn):
-    logging.info('f=atualizar_periodo_ponto, m=iniciando processo para atualizar periodo ponto.')
+    logging.info('f=atualizar_periodo_ponto, m=iniciando processo para atualizar periodo ponto')
 
     horas_periodo = (periodo_ponto.horario_saida - periodo_ponto.horario_entrada).total_seconds() / 3600
 
@@ -43,11 +44,11 @@ def atualizar(periodo_ponto, conn):
 
     conn.commit()
 
-    logging.info(f'f=atualizar_periodo_ponto, m=periodo ponto atualizado com sucesso {periodo_ponto}.')
+    logging.info(f'f=atualizar_periodo_ponto, m=periodo ponto atualizado com sucesso {json.dumps(periodo_ponto.__dict__)}')
 
 
 def buscar(id_ponto, conn):
-    logging.info('f=buscar_periodo_ponto_aberto, m=inciando a verificação para ver se existe periodo ponto aberto.')
+    logging.info('f=buscar_periodo_ponto_aberto, m=inciando a verificação para ver se existe periodo ponto aberto')
 
     sql = """SELECT * FROM periodo_ponto WHERE id_ponto = %s AND hora_saida is null"""
 
@@ -66,10 +67,10 @@ def buscar(id_ponto, conn):
             periodo_ponto_data[4]
         )
 
-        logging.info(f'f=buscar_periodo_ponto_aberto, m=periodo ponto encontrado {periodo_ponto}.')
+        logging.info(f'f=buscar_periodo_ponto_aberto, m=periodo ponto encontrado {json.dumps(periodo_ponto.__dict__)}')
         return periodo_ponto
 
-    logging.info(f'f=buscar_periodo_ponto_aberto, m=periodo ponto não encontrado.')
+    logging.info(f'f=buscar_periodo_ponto_aberto, m=periodo ponto não encontrado')
     return None
 
 

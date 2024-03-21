@@ -9,10 +9,11 @@ from app.src.repository.periodo_ponto_repository import salvar as salvar_periodo
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+
 def execute(id_funcionario, situacao_pontos, conn) -> None:
     situacao = next(filter(lambda situacao_ponto: situacao_ponto.descricao == 'ABERTO', situacao_pontos))
 
-    logging.info(f'id_funcionario={id_funcionario} situacao={situacao}.')
+    logging.info(f'id_funcionario={id_funcionario} situacao={situacao}')
 
     ponto = salvar_ponto(
         Ponto(

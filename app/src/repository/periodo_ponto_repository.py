@@ -89,20 +89,23 @@ def calcular_horas_trabalhadas(id_ponto, now, conn):
     total_horas_trabalhadas = None
 
     for horas_trabalhada_data in horas_trabalhadas_data:
-        datetime_entrada = datetime.combine(now, horas_trabalhada_data[0])
-        datetime_saida = datetime.combine(now, horas_trabalhada_data[1])
+        if horas_trabalhadas_data[1] is not None:
+            datetime_entrada = datetime.combine(now, horas_trabalhada_data[0])
+            datetime_saida = datetime.combine(now, horas_trabalhada_data[1])
 
-        diferenca = datetime_saida - datetime_entrada
+            logging.info(f'datetime_entrada={datetime_entrada}, datetime_saida={datetime_saida}')
 
-        horas_periodo = (diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
+            diferenca = datetime_saida - datetime_entrada
 
-        if total_horas_trabalhadas is None:
-            total_horas_trabalhadas = horas_periodo
-        else:
-            total_horas_trabalhadas = (
-                total_horas_trabalhadas[0] + horas_periodo[0],
-                total_horas_trabalhadas[1] + horas_periodo[1],
-                total_horas_trabalhadas[2] + horas_periodo[2]
-            )
+            horas_periodo = (diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
+
+            if total_horas_trabalhadas is None:
+                total_horas_trabalhadas = horas_periodo
+            else:
+                total_horas_trabalhadas = (
+                    total_horas_trabalhadas[0] + horas_periodo[0],
+                    total_horas_trabalhadas[1] + horas_periodo[1],
+                    total_horas_trabalhadas[2] + horas_periodo[2]
+                )
 
     return total_horas_trabalhadas

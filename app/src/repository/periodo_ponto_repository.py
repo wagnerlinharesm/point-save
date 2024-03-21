@@ -94,10 +94,9 @@ def calcular_horas_trabalhadas(id_ponto, now, conn):
 
     total_horas_trabalhadas = None
 
-    logging.info(f'horas_trabalhadas_data={horas_trabalhadas_data}')
-    logging.info(f'horas_trabalhadas_data={horas_trabalhadas_data[0]}')
-
     for horas_trabalhada_data in horas_trabalhadas_data:
+        logging.info(f'horas_trabalhada_data={horas_trabalhada_data}')
+
         if horas_trabalhadas_data[3] is not None:
             datetime_entrada = datetime.combine(now, horas_trabalhada_data[2])
             datetime_saida = datetime.combine(now, horas_trabalhada_data[3])

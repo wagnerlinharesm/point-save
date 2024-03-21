@@ -10,17 +10,17 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def execute(id_funcionario, situacao_pontos, conn) -> None:
+def execute(id_funcionario, situacao_pontos, now, conn) -> None:
     situacao = next(filter(lambda situacao_ponto: situacao_ponto.descricao == 'ABERTO', situacao_pontos))
 
-    time_only = datetime.now().time()
+    time_only = now.time()
 
     ponto = salvar_ponto(
         Ponto(
             None,
             id_funcionario,
             situacao.id_situacao_ponto,
-            datetime.now(),
+            now,
             time_only
         ),
         conn

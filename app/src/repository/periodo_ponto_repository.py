@@ -27,11 +27,11 @@ def salvar(periodo_ponto, conn):
     return periodo_ponto
 
 
-def atualizar(periodo_ponto, conn):
+def atualizar(periodo_ponto, now, conn):
     logging.info('f=atualizar_periodo_ponto, m=iniciando processo para atualizar periodo ponto')
 
-    datetime_entrada = datetime.combine(date.today(), periodo_ponto.horario_entrada)
-    datetime_saida = datetime.combine(date.today(), periodo_ponto.horario_saida)
+    datetime_entrada = datetime.combine(now, periodo_ponto.horario_entrada)
+    datetime_saida = datetime.combine(now, periodo_ponto.horario_saida)
 
     diferenca = datetime_saida - datetime_entrada
 
@@ -79,7 +79,7 @@ def buscar(id_ponto, conn):
     return None
 
 
-def calcular_horas_trabalhadas(id_ponto, conn):
+def calcular_horas_trabalhadas(id_ponto, now, conn):
     sql = """SELECT hora_entrada, hora_saida FROM periodo_ponto WHERE id_ponto = %s AND hora_saida 
     IS NOT NULL"""
 
@@ -91,8 +91,8 @@ def calcular_horas_trabalhadas(id_ponto, conn):
     total_horas_trabalhadas = None
 
     for horas_trabalhada_data in horas_trabalhadas_data:
-        datetime_entrada = datetime.combine(date.today(), horas_trabalhada_data[0])
-        datetime_saida = datetime.combine(date.today(), horas_trabalhada_data[1])
+        datetime_entrada = datetime.combine(now, horas_trabalhada_data[0])
+        datetime_saida = datetime.combine(now, horas_trabalhada_data[1])
 
         diferenca = datetime_saida - datetime_entrada
 

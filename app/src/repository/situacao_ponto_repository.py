@@ -1,4 +1,3 @@
-import json
 import logging
 
 from app.src.entity.situacao_ponto import SituacaoPonto

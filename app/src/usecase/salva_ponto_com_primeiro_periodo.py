@@ -30,9 +30,9 @@ def execute(id_funcionario, situacao_pontos, now, conn) -> None:
         PeriodoPonto(
             None,
             ponto.id_ponto,
-            time_zero,
+            now.time(),
             None,
-            None
+            time_zero
         ),
         conn
     )

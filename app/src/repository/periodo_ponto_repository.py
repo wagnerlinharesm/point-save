@@ -1,6 +1,6 @@
 import logging
 
-from datetime import datetime
+from datetime import datetime, time
 from app.src.entity.periodo_ponto import PeriodoPonto
 
 
@@ -37,7 +37,7 @@ def atualizar(periodo_ponto, now, conn):
 
     logging.info(f'diferenca={diferenca}')
 
-    horas_periodo = (diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
+    horas_periodo = time(diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
 
     logging.info(f'horas_periodo={horas_periodo}')
 
@@ -103,7 +103,7 @@ def calcular_horas_trabalhadas(id_ponto, now, conn):
 
             diferenca = datetime_saida - datetime_entrada
 
-            horas_periodo = (diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
+            horas_periodo = time(diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
 
             if total_horas_trabalhadas is None:
                 total_horas_trabalhadas = horas_periodo

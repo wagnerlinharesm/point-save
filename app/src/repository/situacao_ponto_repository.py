@@ -21,7 +21,7 @@ def buscar(conn):
             situacao_ponto = SituacaoPonto(situacao_ponto_data[0], situacao_ponto_data[1])
             situacao_pontos.append(situacao_ponto)
 
-        logging.info(f'f=busca_situacao_pontos, m=situações encontradas {json.dumps(situacao_pontos.__dict__)}.')
+        logging.info(f'f=busca_situacao_pontos, m=situações encontradas {json.dumps(situacao_pontos)}')
         return situacao_pontos
 
     logging.info(f'f=busca_situacao_pontos, m=situações não encontradas')

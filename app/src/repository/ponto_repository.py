@@ -11,6 +11,8 @@ def salvar(ponto, conn):
 
     data_formatada = ponto.data.strftime('%Y-%m-%d')
 
+    logging.info(f'ponto={ponto.id_funcionario} id_situacao_ponto={ponto.id_situacao_ponto} data_formatada={data_formatada} horas_trabalhadas={ponto.horas_trabalhadas}.')
+
     sql_insert = SQL("INSERT INTO {} VALUES (%s)").format(Identifier('ponto')), (
         ponto.id_funcionario,
         ponto.id_situacao_ponto,
@@ -23,6 +25,8 @@ def salvar(ponto, conn):
     cursor.execute(sql_insert)
 
     conn.commit()
+
+    logging.info('select')
 
     sql_select = SQL("SELECT * FROM {} WHERE {} = %s AND {} = %s").format(
         Identifier('ponto'),

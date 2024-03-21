@@ -31,15 +31,9 @@ def atualizar(periodo_ponto, now, conn):
     datetime_entrada = datetime.combine(now, periodo_ponto.horario_entrada)
     datetime_saida = datetime.combine(now, periodo_ponto.horario_saida)
 
-    logging.info(f'datetime_entrada={datetime_entrada}, datetime_saida={datetime_saida}')
-
     diferenca = datetime_saida - datetime_entrada
 
-    logging.info(f'diferenca={diferenca}')
-
     horas_periodo = time(diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
-
-    logging.info(f'horas_periodo={horas_periodo}')
 
     sql = """
     UPDATE periodo_ponto
@@ -84,7 +78,7 @@ def buscar(id_ponto, conn):
 
 
 def calcular_horas_trabalhadas(id_ponto, now, conn):
-    sql = """SELECT * FROM periodo_ponto WHERE id_ponto = %s AND hora_saida 
+    sql = """SELECT hora_entrada, hora_saida FROM periodo_ponto WHERE id_ponto = %s AND hora_saida 
     IS NOT NULL"""
 
     cursor = conn.cursor()
@@ -95,17 +89,17 @@ def calcular_horas_trabalhadas(id_ponto, now, conn):
     total_horas_trabalhadas = None
 
     for horas_trabalhada_data in horas_trabalhadas_data:
-        logging.info(f'horas_trabalhada_data={horas_trabalhada_data}')
-
-        if horas_trabalhadas_data[3] is not None:
-            datetime_entrada = datetime.combine(now, horas_trabalhada_data[2])
-            datetime_saida = datetime.combine(now, horas_trabalhada_data[3])
+        if horas_trabalhada_data[1] is not None:
+            datetime_entrada = datetime.combine(now, horas_trabalhada_data[0])
+            datetime_saida = datetime.combine(now, horas_trabalhada_data[1])
 
             logging.info(f'datetime_entrada={datetime_entrada}, datetime_saida={datetime_saida}')
 
             diferenca = datetime_saida - datetime_entrada
 
             horas_periodo = time(diferenca.seconds // 3600, (diferenca.seconds // 60) % 60, diferenca.seconds % 60)
+
+            logging.info(f'horas_periodo={horas_periodo}')
 
             if total_horas_trabalhadas is None:
                 total_horas_trabalhadas = horas_periodo
@@ -115,5 +109,7 @@ def calcular_horas_trabalhadas(id_ponto, now, conn):
                     total_horas_trabalhadas[1] + horas_periodo[1],
                     total_horas_trabalhadas[2] + horas_periodo[2]
                 )
+
+            logging.info(f'total_horas_trabalhadas={total_horas_trabalhadas}')
 
     return total_horas_trabalhadas

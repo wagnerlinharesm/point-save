@@ -35,8 +35,8 @@ resource "aws_lambda_function" "point_save_lambda_function" {
 
   environment {
     variables = {
-      DB_HOST     = "point-db.cqivfynnpqib.us-east-2.rds.amazonaws.com:5432",
-      DB_NAME     = "point_db",
+      DB_HOST     = var.point_db_host,
+      DB_NAME     = var.point_db_name,
       DB_USER     = local.point_db_secrets["username"],
       DB_PASSWORD = local.point_db_secrets["password"],
     }

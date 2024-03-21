@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 
 from app.src.entity.periodo_ponto import PeriodoPonto
 from app.src.repository.periodo_ponto_repository import (
@@ -23,9 +23,9 @@ def execute(id_ponto, situacao_pontos, now, conn) -> None:
             PeriodoPonto(
                 None,
                 id_ponto,
-                datetime.now().time(),
+                now.time(),
                 None,
-                datetime.now().time()
+                time(0, 0, 0)
             ),
             conn
         )

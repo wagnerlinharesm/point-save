@@ -37,6 +37,7 @@ def salvar(ponto, conn):
 
 def atualizar(id_ponto, horas_trabalhadas, id_situacao_ponto, conn):
     logging.info('f=atualizar_ponto, m=iniciando processo para atualizar ponto')
+    logging.info(f'horas_trabalhadas={horas_trabalhadas}, id_situacao_ponto={id_situacao_ponto} id_ponto={id_ponto}')
 
     sql = """
     UPDATE ponto

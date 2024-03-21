@@ -1,4 +1,3 @@
-import json
 import logging
 
 from app.src.entity.ponto import Ponto
@@ -8,9 +7,6 @@ def salvar(ponto, conn):
     logging.info('f=salvar_ponto, m=iniciando processo para salvar ponto')
 
     data_formatada = ponto.data.strftime('%Y-%m-%d')
-
-    logging.info(f'ponto={ponto.id_funcionario} id_situacao_ponto={ponto.id_situacao_ponto} '
-                 f'data_formatada={data_formatada} horas_trabalhadas={ponto.horas_trabalhadas}')
 
     sql_insert = """
         INSERT INTO ponto (id_funcionario, id_situacao_ponto, data, horas_trabalhadas)
@@ -42,7 +38,7 @@ def atualizar(id_ponto, horas_trabalhadas, id_situacao_ponto, conn):
         sql = """
         UPDATE ponto
         SET horas_trabalhadas = %s, id_situacao_ponto = %s
-        WHERE id_ponto = %S
+        WHERE id_ponto = %s
         """
 
         cursor = conn.cursor()
@@ -51,7 +47,7 @@ def atualizar(id_ponto, horas_trabalhadas, id_situacao_ponto, conn):
 
         conn.commit()
 
-        logging.info(f'f=atualizar_ponto, m=ponto atualizado com sucesso')
+        logging.info('f=atualizar_ponto, m=ponto atualizado com sucesso')
 
 
 def buscar(id_funcionario, now, conn):

@@ -48,7 +48,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
             if point_period.end_time is not None:
 
-                work_time = self.add_times(point_period.begin_time, point_period.end_time, now)
+                work_time = self.add_times(now, point_period.begin_time, point_period.end_time)
 
                 logging.info(f'f=add_times, work_time={work_time}')
 

@@ -28,7 +28,7 @@ class PointAdapter(metaclass=SingletonMeta):
             row_dict['horas_trabalhadas']
         )
 
-        logging.info(f'f=buscar_ponto, m=ponto encontrado')
+        logging.info('f=buscar_ponto, m=ponto encontrado')
 
         return point
 

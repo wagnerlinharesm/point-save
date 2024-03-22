@@ -16,7 +16,7 @@ class PunchClockUseCase(metaclass=SingletonMeta):
 
     def execute(self, employee_id, now):
         situations = self._situation_adapter.fetch_all()
-        point = self._point_adapter.fetch_one(employee_id, now)
+        point = self._point_adapter.fetch_one(employee_id, now.strftime('%Y-%m-%d'))
 
         if not point:
             self._save_point_with_first_period_use_case.execute(employee_id, situations, now)

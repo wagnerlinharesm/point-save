@@ -1,3 +1,5 @@
+import logging
+
 from datetime import datetime, time
 
 from app.src.adapter.point_adapter import PointAdapter
@@ -39,10 +41,16 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         total_work_time = None
 
+        logging.info(f'f=get_work_time, point_periods={point_periods}')
+
         for point_period in point_periods:
+            logging.info(f'f=get_work_time, point_period_id={point_period.point_id}, end_time={point_period.end_time}')
+
             if point_period.end_time is not None:
 
                 work_time = self.get_work_time(point_period, now)
+
+                logging.info(f'f=get_work_time, work_time={work_time}')
 
                 if total_work_time is None:
                     total_work_time = work_time
@@ -53,12 +61,23 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
                         total_work_time[2] + work_time[2]
                     )
 
+                logging.info(f'f=get_work_time, total_work_time={total_work_time}')
+
         return total_work_time
 
     def get_work_time(self, point_period, now):
+
+        logging.info(f'f=get_work_time, begin_time={point_period.begin_time}, end_time={point_period.end_time}, now={now} .')
+
         entry_date = datetime.combine(now, point_period.begin_time)
         exit_date = datetime.combine(now, point_period.end_time)
 
         date_diff = exit_date - entry_date
 
-        return time(date_diff.seconds // 3600, (date_diff.seconds // 60) % 60, date_diff.seconds % 60)
+        logging.info(f'f=get_work_time, date_diff={date_diff}.')
+
+        time2 = time(date_diff.seconds // 3600, (date_diff.seconds // 60) % 60, date_diff.seconds % 60)
+
+        logging.info(f'f=get_work_time, time2={time2}.')
+
+        return time2

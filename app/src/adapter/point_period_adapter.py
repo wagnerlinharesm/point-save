@@ -77,6 +77,7 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
 
     def update(self, end_time, work_time, point_period_id):
         logging.info('f=atualizar_ponto_periodo, m=iniciando processo para atualizar ponto periodo')
+        logging.info(f'f=atualizar_ponto_periodo, end_time={end_time} work_time={work_time} point_period_id={point_period_id}')
 
         query = """
                 UPDATE periodo_ponto

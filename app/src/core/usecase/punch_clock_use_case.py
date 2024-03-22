@@ -21,4 +21,4 @@ class PunchClockUseCase(metaclass=SingletonMeta):
         if not point:
             self._save_point_with_first_period_use_case.execute(employee_id, situations, now)
         else:
-            self._save_or_update_point_period_use_case.execute(point.point_id, situations, now)
+            self._save_or_update_point_period_use_case.execute(point, situations, now)

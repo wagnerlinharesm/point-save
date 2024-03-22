@@ -26,6 +26,7 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
             row_dict['horas_periodo']
         )
 
+        logging.info(f'f=buscar_ponto_periodo_aberto, begin_time={point_period.begin_time}, end_time={point_period.end_time}')
         logging.info('f=buscar_periodo_ponto_aberto, m=ponto periodo encontrado')
 
         return point_period

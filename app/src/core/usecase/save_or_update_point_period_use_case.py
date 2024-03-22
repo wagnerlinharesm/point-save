@@ -56,9 +56,9 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
                     total_work_time = work_time
                 else:
                     total_work_time = time(
-                        total_work_time[0] + work_time[0],
-                        total_work_time[1] + work_time[1],
-                        total_work_time[2] + work_time[2]
+                        total_work_time.hour + work_time.hour,
+                        total_work_time.minute + work_time.minute,
+                        total_work_time.second + work_time.second
                     )
 
                 logging.info(f'f=get_work_time, total_work_time={total_work_time}')

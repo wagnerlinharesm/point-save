@@ -48,20 +48,16 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
             if point_period.end_time is not None:
 
-                work_time = self.get_work_time(point_period, now)
+                work_time = self.add_times(point_period.begin_time, point_period.end_time, now)
 
-                logging.info(f'f=get_work_time, work_time={work_time}')
+                logging.info(f'f=add_times, work_time={work_time}')
 
                 if total_work_time is None:
                     total_work_time = work_time
                 else:
-                    total_work_time = time(
-                        total_work_time.hour + work_time.hour,
-                        total_work_time.minute + work_time.minute,
-                        total_work_time.second + work_time.second
-                    )
+                    total_work_time = self.add_times(now, total_work_time, work_time)
 
-                logging.info(f'f=get_work_time, total_work_time={total_work_time}')
+                logging.info(f'f=add_times, total_work_time={total_work_time}')
 
         return total_work_time
 
@@ -81,3 +77,12 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         logging.info(f'f=get_work_time, time2={time2}.')
 
         return time2
+
+    def add_times(self, now, first_time, second_time):
+        first_datetime = datetime.combine(now, first_time)
+        second_datetime = datetime.combine(now, second_time)
+
+        difference_time = ((second_datetime - datetime(1970, 1, 1)) +
+                           (first_datetime - datetime(1970, 1, 1)))
+
+        return (datetime(1970, 1, 1) + difference_time).time()

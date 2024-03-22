@@ -40,19 +40,19 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         total_work_time = None
 
-        logging.info(f'f=get_work_time, point_periods={point_periods}')
+        logging.info(f'f=get_total_work_time, point_periods={point_periods}')
 
         for point_period in point_periods:
-            logging.info(f'f=get_work_time, point_period_id={point_period.point_id}, end_time={point_period.end_time}')
+            logging.info(f'f=get_total_work_time, point_period_id={point_period.point_id}, end_time={point_period.end_time}')
 
-            logging.info(f'f=add_times, work_time={point_period.work_time}')
+            logging.info(f'f=get_total_work_time, work_time={point_period.work_time}')
 
             if total_work_time is None:
                 total_work_time = point_work_time
             else:
                 total_work_time = self.add_times(now, point_period.work_time, total_work_time)
 
-            logging.info(f'f=add_times, total_work_time={total_work_time}')
+            logging.info(f'f=get_total_work_time, total_work_time={total_work_time}')
 
         return total_work_time
 
@@ -75,10 +75,22 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         return time2
 
     def add_times(self, now, first_time, second_time):
+        logging.info(f'f=add_times, first_time={first_time}')
+        logging.info(f'f=add_times, second_time={second_time}')
+
         first_datetime = datetime.combine(now, first_time)
         second_datetime = datetime.combine(now, second_time)
+
+        logging.info(f'f=add_times, first_datetime={first_datetime}')
+        logging.info(f'f=add_times, second_datetime={second_datetime}')
 
         difference_time = ((second_datetime - datetime(1970, 1, 1)) +
                            (first_datetime - datetime(1970, 1, 1)))
 
-        return (datetime(1970, 1, 1) + difference_time).time()
+        logging.info(f'f=add_times, difference_time={difference_time}')
+
+        new_time = (datetime(1970, 1, 1) + difference_time).time()
+
+        logging.info(f'f=add_times, new_time={new_time}')
+
+        return new_time

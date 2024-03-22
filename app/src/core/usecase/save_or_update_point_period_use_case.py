@@ -67,6 +67,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         return time2
 
     def add_times(self, now, first_time, second_time):
+        logging.info(f'f=add_times, now={now}')
         logging.info(f'f=add_times, first_time={first_time}')
         logging.info(f'f=add_times, second_time={second_time}')
 

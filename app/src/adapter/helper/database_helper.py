@@ -54,6 +54,7 @@ class DatabaseHelper(metaclass=SingletonMeta):
 
     @staticmethod
     def __row_to_dict(cursor, row):
+        logging.info(f"row: {row}")
         column_names = [desc[0] for desc in cursor.description]
         return dict(zip(column_names, row))
 
@@ -71,6 +72,7 @@ class DatabaseHelper(metaclass=SingletonMeta):
     def fetch_one(self, query, params=None):
         try:
             with self._connection.cursor() as cursor:
+                logging.info("Executing query '%s' with parameters '%s'", query, params)
                 cursor.execute(query, params)
                 row = cursor.fetchone()
                 return self.__row_to_dict(cursor, row)

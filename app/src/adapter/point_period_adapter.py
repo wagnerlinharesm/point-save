@@ -34,7 +34,7 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
         logging.info('f=buscar_ponto_periodos, m=inciando a busca dos pontos periodos')
 
         query = """
-                    SELECT hora_entrada, hora_saida 
+                    SELECT * 
                     FROM periodo_ponto 
                     WHERE id_ponto = %s 
                     AND hora_saida IS NOT NULL

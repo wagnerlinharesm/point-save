@@ -19,8 +19,6 @@ class SavePointWithFirstPeriodUseCase(metaclass=SingletonMeta):
     def execute(self, employee_id, situations, now) -> None:
         situation = next(filter(lambda element: element.description == 'ABERTO', situations))
 
-        logging.info('situations: %s', situations)
-
         init_time = time(0, 0, 0)
         formatted_date = now.strftime('%Y-%m-%d')
 
@@ -28,7 +26,7 @@ class SavePointWithFirstPeriodUseCase(metaclass=SingletonMeta):
             Point(
                 None,
                 employee_id,
-                situation.id_situation_point,
+                situation.situation_id,
                 formatted_date,
                 init_time
             )

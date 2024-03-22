@@ -1,18 +1,11 @@
 import logging
 import os
-import json
-import jwt
+from datetime import datetime
+
 import pytz
 
-import psycopg2
-
-from datetime import datetime
-from app.src.repository.ponto_repository import (
-    buscar as buscar_ponto,
-)
-from app.src.repository.situacao_ponto_repository import buscar as busca_situacao_pontos
-from app.src.usecase.salva_ou_atualiza_periodo_pedido import execute as salva_ou_atualiza_periodo_pedido
-from app.src.usecase.salva_ponto_com_primeiro_periodo import execute as salva_ponto_com_primeiro_periodo
+from app.src.core.usecase.punch_clock_use_case import PunchClockUseCase
+from app.src.util.jwt_util import JwtUtil
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -22,29 +15,18 @@ dbname = os.getenv('DB_NAME')
 username = os.getenv('DB_USER')
 password = os.getenv('DB_PASSWORD')
 
-pytz.timezone('America/Sao_Paulo')
+now = datetime.now(pytz.timezone('America/Sao_Paulo'))
 
 
 def handler(event, context):
     logging.info('Iniciando a execução da função lambda')
 
-    id_funcionario = get_username(event)
+    employee_id = get_username(event)
 
-    conn = connection()
-
-    now = datetime.now(pytz.timezone('America/Sao_Paulo'))
+    punch_clock_use_case = PunchClockUseCase()
 
     try:
-        situacao_pontos = busca_situacao_pontos(conn)
-        ponto = buscar_ponto(id_funcionario, now, conn)
-
-        if not ponto:
-            salva_ponto_com_primeiro_periodo(id_funcionario, situacao_pontos, now, conn)
-        else:
-            salva_ou_atualiza_periodo_pedido(ponto.id_ponto, situacao_pontos, now, conn)
-
-        conn.cursor().close()
-        conn.close()
+        punch_clock_use_case.execute(employee_id, now)
     except Exception as e:
         logging.error(f'Erro ao salvar ponto: {e}')
         return {"result": "Erro ao salvar ponto"}
@@ -53,32 +35,36 @@ def handler(event, context):
 
 
 def get_username(event):
-    try:
-        token = event['headers'].get('Authorization', '').split(' ')[1]
-        token_payload = jwt.decode(token, options={"verify_signature": False})
-        username = token_payload.get('cognito:username')
+    jwt_token = get_jwt_token(event)
+    jwt_util = JwtUtil(jwt_token)
 
-        if not username:
-            raise ValueError('Username not found in token')
-
-        return username
-    except jwt.DecodeError:
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'error': 'Invalid token'})
-        }
-    except ValueError as e:
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'error': str(e)})
-        }
+    return jwt_util.get_required_attribute("cognito:username")
 
 
-def connection():
-    config = {
-        'dbname': dbname,
-        'user': username,
-        'password': password,
-        'host': host
-    }
-    return psycopg2.connect(**config)
+def get_jwt_token(event):
+    authorization = get_body(event)
+    split_authorization = authorization.split()
+
+    if len(split_authorization) == 1:
+        return split_authorization[0]
+    elif len(split_authorization) == 2:
+        return split_authorization[1]
+
+    raise Exception("invalid authorization.")
+
+
+def get_body(event):
+    records = event.get("Records", [])
+
+    if len(records) == 0:
+        raise Exception("missing record.")
+
+    if len(records) > 1:
+        raise Exception("multiple records.")
+
+    body = records[0].get("body")
+
+    if body is None:
+        raise Exception("missing body.")
+
+    return body

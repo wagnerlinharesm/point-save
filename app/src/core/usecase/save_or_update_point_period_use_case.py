@@ -40,19 +40,11 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         total_work_time = None
 
-        logging.info(f'f=get_total_work_time, point_periods={point_periods}')
-
         for point_period in point_periods:
-            logging.info(f'f=get_total_work_time, point_period_id={point_period.point_id}, end_time={point_period.end_time}')
-
-            logging.info(f'f=get_total_work_time, work_time={point_period.work_time}')
-
             if total_work_time is None:
                 total_work_time = point_work_time
             else:
                 total_work_time = self.add_times(now, point_period.work_time, total_work_time)
-
-            logging.info(f'f=get_total_work_time, total_work_time={total_work_time}')
 
         return total_work_time
 

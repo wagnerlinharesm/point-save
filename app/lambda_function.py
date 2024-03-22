@@ -19,8 +19,6 @@ now = datetime.now(pytz.timezone('America/Sao_Paulo'))
 
 
 def handler(event, context):
-    logging.info('Iniciando a execução da função lambda')
-
     employee_id = get_username(event)
 
     punch_clock_use_case = PunchClockUseCase()

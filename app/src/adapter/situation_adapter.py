@@ -9,8 +9,6 @@ class SituationAdapter(metaclass=SingletonMeta):
     _db_helper = DatabaseHelper()
 
     def fetch_all(self):
-        logging.info('f=busca_situacao_pontos, m=inciando a busca das situações')
-
         query = """SELECT * FROM situacao_ponto"""
 
         rows_dict = self._db_helper.fetch_all(query)
@@ -25,5 +23,4 @@ class SituationAdapter(metaclass=SingletonMeta):
 
             situations.append(situation)
 
-        logging.info(f'f=busca_situacao_pontos, m=situações encontradas')
         return situations

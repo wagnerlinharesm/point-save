@@ -1,3 +1,4 @@
+import pytz
 import logging
 
 from datetime import datetime, time
@@ -71,8 +72,8 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         logging.info(f'f=add_times, first_time={first_time}')
         logging.info(f'f=add_times, second_time={second_time}')
 
-        first_datetime = datetime.combine(now, first_time)
-        second_datetime = datetime.combine(now, second_time)
+        first_datetime = pytz.timezone('America/Sao_Paulo').localize(datetime.combine(now, first_time))
+        second_datetime = pytz.timezone('America/Sao_Paulo').localize(datetime.combine(now, second_time))
 
         logging.info(f'f=add_times, first_datetime={first_datetime}')
         logging.info(f'f=add_times, second_datetime={second_datetime}')

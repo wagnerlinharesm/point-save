@@ -32,7 +32,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             )
 
         total_work_time = self.get_total_work_time(point_period, now)
-        self._point_period_adapter.update(point_id, total_work_time, situation.situation_id)
+        self._point_adapter.update(point_id, situation.situation_id, total_work_time)
 
     def get_total_work_time(self, point_period, now):
         point_periods = self._point_period_adapter.fetch_all(point_period.point_id)

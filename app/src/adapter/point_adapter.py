@@ -54,7 +54,7 @@ class PointAdapter(metaclass=SingletonMeta):
         query = """
                 UPDATE ponto
                 SET horas_trabalhadas = %s, id_situacao_ponto = %s
-                WHERE id_ponto = %S
+                WHERE id_ponto = %s
                 """
 
         self._db_helper.insert_or_update(query, (work_time, situation_id, point_id,))

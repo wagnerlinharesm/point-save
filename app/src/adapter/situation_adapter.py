@@ -20,7 +20,7 @@ class SituationAdapter(metaclass=SingletonMeta):
         for row_dict in rows_dict:
             situation = Situation(
                 row_dict['id_situacao_ponto'],
-                row_dict['descricao']
+                row_dict['situacao']
             )
 
             situations.append(situation)

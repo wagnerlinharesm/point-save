@@ -9,8 +9,6 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
     _db_helper = DatabaseHelper()
 
     def fetch_one(self, point_id):
-        logging.info('f=buscar_ponto_periodo_aberto, m=inciando a verificação para ver se existe ponto periodo aberto')
-
         query = """SELECT * FROM periodo_ponto WHERE id_ponto = %s AND hora_saida is null"""
 
         row_dict = self._db_helper.fetch_one(query, (point_id,))
@@ -26,13 +24,9 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
             row_dict['horas_periodo']
         )
 
-        logging.info(f'f=buscar_ponto_periodo_aberto, begin_time={point_period.begin_time}, end_time={point_period.end_time}')
-        logging.info('f=buscar_periodo_ponto_aberto, m=ponto periodo encontrado')
-
         return point_period
 
     def fetch_all(self, point_id):
-        logging.info('f=buscar_ponto_periodos, m=inciando a busca dos pontos periodos')
 
         query = """
                     SELECT * 
@@ -56,13 +50,9 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
 
             point_periods.append(point_period)
 
-        logging.info('f=buscar_ponto_periodos, m=pontos periodos encontrados')
-
         return point_periods
 
     def save(self, point_period):
-        logging.info('f=salvar_ponto_periodo, m=iniciando processo para salvar ponto periodo')
-
         query = """
             INSERT INTO periodo_ponto (id_ponto, hora_entrada, hora_saida, horas_periodo)
             VALUES (%s, %s, %s, %s)
@@ -74,11 +64,8 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
             point_period.end_time,
             point_period.work_time,))
 
-        logging.info(f'f=salvar_ponto_periodo, m=ponto periodo salvo com sucesso')
 
     def update(self, point_period):
-        logging.info('f=atualizar_ponto_periodo, m=iniciando processo para atualizar ponto periodo')
-
         query = """
                 UPDATE periodo_ponto
                 SET hora_saida = %s, horas_periodo = %s
@@ -89,5 +76,3 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
             point_period.end_time,
             point_period.work_time,
             point_period.point_period_id,))
-
-        logging.info(f'f=atualizar_ponto_periodo, m=ponto periodo atualizado com sucesso')

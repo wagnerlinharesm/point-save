@@ -76,12 +76,12 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         logging.info(f'f=add_times, first_datetime={first_datetime}')
         logging.info(f'f=add_times, second_datetime={second_datetime}')
 
-        difference_time = ((second_datetime - datetime(1970, 1, 1)) +
-                           (first_datetime - datetime(1970, 1, 1)))
+        difference_time = ((second_datetime - now) +
+                           (first_datetime - now))
 
         logging.info(f'f=add_times, difference_time={difference_time}')
 
-        new_time = (datetime(1970, 1, 1) + difference_time).time()
+        new_time = (now + difference_time).time()
 
         logging.info(f'f=add_times, new_time={new_time}')
 

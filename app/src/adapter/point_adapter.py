@@ -18,6 +18,7 @@ class PointAdapter(metaclass=SingletonMeta):
         row_dict = self._db_helper.fetch_one(query, (employee_id, date))
 
         if row_dict is None:
+            logging.info('f=buscar_ponto, m=ponto não encontrado')
             return None
 
         point = Point(

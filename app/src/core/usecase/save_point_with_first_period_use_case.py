@@ -37,7 +37,7 @@ class SavePointWithFirstPeriodUseCase(metaclass=SingletonMeta):
         self._point_period_adapter.save(
             PointPeriod(
                 None,
-                point.id_ponto,
+                point.point_id,
                 now.time(),
                 None,
                 init_time

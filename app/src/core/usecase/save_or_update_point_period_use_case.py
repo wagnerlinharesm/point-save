@@ -23,15 +23,15 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             self._point_period_adapter.update(point_period)
         else:
             situation = next(filter(lambda element: element.description == 'ABERTO', situations))
-            self._point_period_adapter.save(
-                PointPeriod(
+            point_period = PointPeriod(
                     None,
                     point_id,
                     now.time(),
                     None,
                     time(0, 0, 0)
                 )
-            )
+
+            self._point_period_adapter.save(point_period)
 
         total_work_time = self.get_total_work_time(point_period, now)
         self._point_adapter.update(point_id, situation.situation_id, total_work_time)

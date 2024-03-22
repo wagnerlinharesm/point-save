@@ -15,6 +15,8 @@ class PointAdapter(metaclass=SingletonMeta):
                     SELECT * FROM ponto WHERE id_funcionario = %s AND data = %s
                     """
 
+        logging.info(f'f=employee_id={employee_id}, date={date}')
+
         row_dict = self._db_helper.fetch_one(query, (employee_id, date))
 
         logging.info(f'f=buscar_ponto, row_dict={row_dict}')

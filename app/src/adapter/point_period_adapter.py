@@ -8,6 +8,7 @@ from app.src.util.singleton_meta import SingletonMeta
 
 now = datetime.now(pytz.timezone('America/Sao_Paulo'))
 
+
 class PointPeriodAdapter(metaclass=SingletonMeta):
     _db_helper = DatabaseHelper()
 

@@ -19,14 +19,13 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             logging.info(f'point_period: {point_period.point_id}, end_time: {point_period.end_time}, begin_time: {point_period.begin_time}')
 
             situation = next(filter(lambda element: element.description == 'FECHADO', situations))
-            point_period.end_time = now.time()
-            point_period.work_time = self.get_work_time(point_period, now)
+            point_period.work_time = self.get_work_time(point_period.begin_time, now.time())
 
             logging.info(f'begin_time: {point_period.begin_time}, end_time: {point_period.end_time}')
 
             logging.info(f'Work time: {point_period.work_time}')
 
-            self._point_period_adapter.update(point_period)
+            self._point_period_adapter.update(point_period, now.time())
         else:
             situation = next(filter(lambda element: element.description == 'ABERTO', situations))
             point_period = PointPeriod(
@@ -41,12 +40,12 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         self._point_adapter.update(point.point_id, situation.situation_id)
 
-    def get_work_time(self, point_period, now):
-        logging.info(f'begin_time: {point_period.begin_time}')
-        logging.info(f'end_time: {point_period.end_time}')
+    def get_work_time(self, begin_time, now):
+        logging.info(f'begin_time: {begin_time}')
+        logging.info(f'end_time: {now.time()}')
 
-        entry_date = datetime.combine(now, point_period.begin_time)
-        exit_date = datetime.combine(now, point_period.end_time)
+        entry_date = datetime.combine(now, begin_time)
+        exit_date = datetime.combine(now, now.time())
 
         date_diff = exit_date - entry_date
 

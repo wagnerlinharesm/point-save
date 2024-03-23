@@ -64,7 +64,7 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
             point_period.end_time,
             point_period.work_time,))
 
-    def update(self, point_period):
+    def update(self, point_period, end_time):
         query = """
                 UPDATE periodo_ponto
                 SET hora_saida = %s, horas_periodo = %s
@@ -72,6 +72,6 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
             """
 
         self._db_helper.insert_or_update(query, (
-            point_period.end_time,
+            end_time,
             point_period.work_time,
             point_period.point_period_id,))

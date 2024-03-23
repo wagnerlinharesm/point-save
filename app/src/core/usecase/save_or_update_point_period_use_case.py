@@ -42,7 +42,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
     def get_work_time(self, begin_time, now):
         logging.info(f'begin_time: {begin_time}')
-        logging.info(f'end_time: {now.time()}')
+        logging.info(f'end_time: {now}')
 
         entry_date = datetime.combine(now, begin_time)
         exit_date = datetime.combine(now, now.time())

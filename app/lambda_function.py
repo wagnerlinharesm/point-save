@@ -27,9 +27,9 @@ def handler(event, context):
         punch_clock_use_case.execute(employee_id, now)
     except Exception as e:
         logging.error(f'Erro ao salvar ponto: {e}')
-        return {"result": "Erro ao salvar ponto"}
+        return {"statusCode": 500, "body": "Erro ao salvar ponto"}
 
-    return {"result": "Ponto salvo com sucesso"}
+    return { "statusCode": 200 }
 
 
 def get_username(event):

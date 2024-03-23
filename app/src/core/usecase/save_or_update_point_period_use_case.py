@@ -19,7 +19,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             logging.info(f'point_period: {point_period.point_id}, end_time: {point_period.end_time}, begin_time: {point_period.begin_time}')
 
             situation = next(filter(lambda element: element.description == 'FECHADO', situations))
-            point_period.work_time = self.get_work_time(point_period.begin_time, now.time())
+            point_period.work_time = self.get_work_time(point_period.begin_time, now.time(), now)
 
             logging.info(f'begin_time: {point_period.begin_time}, end_time: {point_period.end_time}')
 
@@ -40,12 +40,12 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         self._point_adapter.update(point.point_id, situation.situation_id)
 
-    def get_work_time(self, begin_time, now):
+    def get_work_time(self, begin_time, end_time, now):
         logging.info(f'begin_time: {begin_time}')
-        logging.info(f'end_time: {now}')
+        logging.info(f'end_time: {end_time}')
 
         entry_date = datetime.combine(now, begin_time)
-        exit_date = datetime.combine(now, now.time())
+        exit_date = datetime.combine(now, end_time)
 
         date_diff = exit_date - entry_date
 

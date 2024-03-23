@@ -60,9 +60,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         logging.info(f'f=get_work_time, date_diff={date_diff}.')
 
-        time2 = self.add(point_period.begin_time, point_period.end_time)
-
-        # time2 = time(date_diff.seconds // 3600, (date_diff.seconds // 60) % 60, date_diff.seconds % 60)
+        time2 = self.timedelta_to_time(date_diff)
 
         logging.info(f'f=get_work_time, time2={time2}.')
 

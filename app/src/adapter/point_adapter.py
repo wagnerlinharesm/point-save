@@ -40,8 +40,15 @@ class PointAdapter(metaclass=SingletonMeta):
             point.date,
             point.work_time,))
 
+    def update(self, point_id, situation_id):
+        query_sum = """
+                                    SELECT sum(horas_periodo)
+                                    FROM periodo_ponto pp
+                                    WHERE id_ponto = %s;
+                                """
 
-    def update(self, point_id, situation_id, work_time):
+        work_time = self._db_helper.fetch_one(query_sum, (point_id,))
+
         query = """
                 UPDATE ponto
                 SET horas_trabalhadas = %s, id_situacao_ponto = %s

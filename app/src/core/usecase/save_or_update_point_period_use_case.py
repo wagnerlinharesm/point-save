@@ -1,6 +1,3 @@
-import pytz
-import logging
-
 from datetime import datetime, time
 
 from app.src.adapter.point_adapter import PointAdapter
@@ -33,10 +30,10 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
             self._point_period_adapter.save(point_period)
 
-        total_work_time = self.get_total_work_time(point_period, point.work_time, now)
+        total_work_time = self.get_total_work_time(point_period, point.work_time)
         self._point_adapter.update(point.point_id, situation.situation_id, total_work_time)
 
-    def get_total_work_time(self, point_period, point_work_time, now):
+    def get_total_work_time(self, point_period, point_work_time):
         point_periods = self._point_period_adapter.fetch_all(point_period.point_id)
 
         total_work_time = None
@@ -45,48 +42,19 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             if total_work_time is None:
                 total_work_time = point_work_time
             else:
-                total_work_time = self.add(total_work_time, point_period.work_time)
+                total_work_time = self.sum_times(total_work_time, point_period.work_time)
 
         return total_work_time
 
     def get_work_time(self, point_period, now):
-        logging.info(
-            f'f=get_work_time, begin_time={point_period.begin_time}, end_time={point_period.end_time}, now={now} .')
-
         entry_date = datetime.combine(now, point_period.begin_time)
         exit_date = datetime.combine(now, point_period.end_time)
 
         date_diff = exit_date - entry_date
 
-        logging.info(f'f=get_work_time, date_diff={date_diff}.')
-
         time2 = self.timedelta_to_time(date_diff)
 
-        logging.info(f'f=get_work_time, time2={time2}.')
-
         return time2
-
-    def add_times(self, now, first_time, second_time):
-        logging.info(f'f=add_times, now={now}')
-        logging.info(f'f=add_times, first_time={first_time}')
-        logging.info(f'f=add_times, second_time={second_time}')
-
-        first_datetime = pytz.timezone('America/Sao_Paulo').localize(datetime.combine(now, first_time))
-        second_datetime = pytz.timezone('America/Sao_Paulo').localize(datetime.combine(now, second_time))
-
-        logging.info(f'f=add_times, first_datetime={first_datetime}')
-        logging.info(f'f=add_times, second_datetime={second_datetime}')
-
-        difference_time = ((second_datetime - now) +
-                           (first_datetime - now))
-
-        logging.info(f'f=add_times, difference_time={difference_time}')
-
-        new_time = (now + difference_time).time()
-
-        logging.info(f'f=add_times, new_time={new_time}')
-
-        return new_time
 
     def timedelta_to_time(self, delta):
         total_seconds = int(delta.total_seconds())
@@ -94,18 +62,13 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         minutes, seconds = divmod(remainder, 60)
         return time(hours, minutes, seconds)
 
-    def add(self, time1, time2):
-        total_seconds = (time1.hour + time2.hour) * 3600 + \
-                         (time1.minute + time2.minute) * 60 + \
-                         time1.second + time2.second
+    def sum_times(self, start_time, final_time):
+        total_seconds = (start_time.hour + final_time.hour) * 3600 + \
+                         (start_time.minute + final_time.minute) * 60 + \
+                         start_time.second + final_time.second
 
-        logging.info(f'f=add, total_seconds={total_seconds}')
+        result_hours, resto = divmod(total_seconds, 3600)
 
-        horas_resultantes, resto = divmod(total_seconds, 3600)
+        result_minutes, result_seconds = divmod(resto, 60)
 
-        logging.info(f'f=add, horas_resultantes={horas_resultantes}')
-        logging.info(f'f=add, resto={resto}')
-
-        minutos_resultantes, segundos_resultantes = divmod(resto, 60)
-
-        return time(horas_resultantes, minutos_resultantes, segundos_resultantes)
+        return time(result_hours, result_minutes, result_seconds)

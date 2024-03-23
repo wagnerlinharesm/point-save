@@ -16,7 +16,7 @@ class SavePointWithFirstPeriodUseCase(metaclass=SingletonMeta):
     _point_adapter = PointAdapter()
     _point_period_adapter = PointPeriodAdapter()
 
-    def execute(self, employee_id, situations, now) -> None:
+    def execute(self, employee_id, situations, now, time_now) -> None:
         situation = next(filter(lambda element: element.description == 'ABERTO', situations))
 
         init_time = time(0, 0, 0)
@@ -38,7 +38,7 @@ class SavePointWithFirstPeriodUseCase(metaclass=SingletonMeta):
             PointPeriod(
                 None,
                 point.point_id,
-                now.time(),
+                time_now,
                 None,
                 init_time
             )

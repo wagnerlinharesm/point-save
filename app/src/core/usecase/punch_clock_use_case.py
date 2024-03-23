@@ -14,11 +14,11 @@ class PunchClockUseCase(metaclass=SingletonMeta):
     _save_point_with_first_period_use_case = SavePointWithFirstPeriodUseCase()
     _save_or_update_point_period_use_case = SaveOrUpdatePointPeriodUseCase()
 
-    def execute(self, employee_id, now):
+    def execute(self, employee_id, now, time_now):
         situations = self._situation_adapter.fetch_all()
         point = self._point_adapter.fetch_one(employee_id, now.strftime('%Y-%m-%d'))
 
         if not point:
-            self._save_point_with_first_period_use_case.execute(employee_id, situations, now)
+            self._save_point_with_first_period_use_case.execute(employee_id, situations, now, time_now)
         else:
-            self._save_or_update_point_period_use_case.execute(point, situations, now)
+            self._save_or_update_point_period_use_case.execute(point, situations, now, time_now)

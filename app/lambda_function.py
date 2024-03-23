@@ -16,7 +16,7 @@ username = os.getenv('DB_USER')
 password = os.getenv('DB_PASSWORD')
 
 now = datetime.now(pytz.timezone('America/Sao_Paulo'))
-
+time_now = now.time()
 
 def handler(event, context):
     employee_id = get_username(event)
@@ -24,7 +24,7 @@ def handler(event, context):
     punch_clock_use_case = PunchClockUseCase()
 
     try:
-        punch_clock_use_case.execute(employee_id, now)
+        punch_clock_use_case.execute(employee_id, now, time_now)
     except Exception as e:
         logging.error(f'Erro ao salvar ponto: {e}')
         return {"statusCode": 500, "body": "Erro ao salvar ponto"}

@@ -11,23 +11,22 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
     _point_adapter = PointAdapter()
     _point_period_adapter = PointPeriodAdapter()
 
-    def execute(self, point, situations, now):
-        now_time = now.time()
+    def execute(self, point, situations, now, time_now):
         point_period = self._point_period_adapter.fetch_one(point.point_id)
 
         if point_period:
             situation = next(filter(lambda element: element.description == 'FECHADO', situations))
-            point_period.work_time = self.get_work_time(point_period.begin_time, now_time, now)
+            point_period.work_time = self.get_work_time(point_period.begin_time, time_now, now)
 
             logging.info(f'begin_time: {point_period.begin_time}, end_time: {point_period.end_time}')
 
-            self._point_period_adapter.update(point_period, now_time)
+            self._point_period_adapter.update(point_period, time_now)
         else:
             situation = next(filter(lambda element: element.description == 'ABERTO', situations))
             point_period = PointPeriod(
                 None,
                 point.point_id,
-                now.time(),
+                time_now,
                 None,
                 time(0, 0, 0)
             )

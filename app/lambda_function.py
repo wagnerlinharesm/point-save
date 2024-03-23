@@ -15,10 +15,11 @@ dbname = os.getenv('DB_NAME')
 username = os.getenv('DB_USER')
 password = os.getenv('DB_PASSWORD')
 
-now = datetime.now(pytz.timezone('America/Sao_Paulo'))
-time_now = now.time()
 
 def handler(event, context):
+    now = datetime.now(pytz.timezone('America/Sao_Paulo'))
+    time_now = now.time()
+
     employee_id = get_username(event)
 
     punch_clock_use_case = PunchClockUseCase()

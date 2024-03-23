@@ -2,8 +2,6 @@ import logging
 import os
 from datetime import datetime
 
-import pytz
-
 from app.src.core.usecase.punch_clock_use_case import PunchClockUseCase
 from app.src.util.jwt_util import JwtUtil
 
@@ -17,7 +15,7 @@ password = os.getenv('DB_PASSWORD')
 
 
 def handler(event, context):
-    now = datetime.now(pytz.timezone('America/Sao_Paulo'))
+    now = datetime.now()
     time_now = now.time()
 
     employee_id = get_username(event)

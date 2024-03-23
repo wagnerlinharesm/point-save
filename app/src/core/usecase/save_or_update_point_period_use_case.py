@@ -98,8 +98,8 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
     def add(self, time1, time2):
         total_seconds = (time1.hour + time2.hour) * 3600 + \
-                         (time1.minutes + time2.minutes) * 60 + \
-                         time1.seconds + time2.seconds
+                         (time1.minute + time2.minute) * 60 + \
+                         time1.second + time2.second
 
         horas_resultantes, resto = divmod(total_seconds, 3600)
         minutos_resultantes, segundos_resultantes = divmod(resto, 60)

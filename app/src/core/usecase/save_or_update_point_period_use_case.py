@@ -15,6 +15,9 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         point_period = self._point_period_adapter.fetch_one(point.point_id)
 
         if point_period:
+
+            logging.info(f'point_period: {point_period.point_id}, end_time: {point_period.end_time}, begin_time: {point_period.begin_time}')
+
             situation = next(filter(lambda element: element.description == 'FECHADO', situations))
             point_period.end_time = now.time()
             point_period.work_time = self.get_work_time(point_period, now)

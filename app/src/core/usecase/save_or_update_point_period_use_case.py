@@ -45,7 +45,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             if total_work_time is None:
                 total_work_time = point_work_time
             else:
-                total_work_time = self.add_times(now, point_period.work_time, total_work_time)
+                total_work_time = self.add(total_work_time, point_period.work_time)
 
         return total_work_time
 
@@ -60,7 +60,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         logging.info(f'f=get_work_time, date_diff={date_diff}.')
 
-        time2 = self.timedelta_to_time(date_diff)
+        time2 = self.add(point_period.begin_time, point_period.end_time)
 
         # time2 = time(date_diff.seconds // 3600, (date_diff.seconds // 60) % 60, date_diff.seconds % 60)
 
@@ -95,3 +95,13 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         return time(hours, minutes, seconds)
+
+    def add(self, time1, time2):
+        total_seconds = (time1.hour + time2.hour) * 3600 + \
+                         (time1.minutes + time2.minutes) * 60 + \
+                         time1.seconds + time2.seconds
+
+        horas_resultantes, resto = divmod(total_seconds, 3600)
+        minutos_resultantes, segundos_resultantes = divmod(resto, 60)
+
+        return time(horas_resultantes, minutos_resultantes, segundos_resultantes)

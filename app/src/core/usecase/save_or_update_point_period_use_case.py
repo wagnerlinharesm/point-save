@@ -19,7 +19,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         if point_period:
             situation = next(filter(lambda element: element.description == 'FECHADO', situations))
             point_period.end_time = now.time()
-            point_period.work_time = self.add_times(now, point_period.begin_time, point_period.end_time)
+            point_period.work_time = self.get_work_time(point_period, now)
             self._point_period_adapter.update(point_period)
         else:
             situation = next(filter(lambda element: element.description == 'ABERTO', situations))
@@ -50,7 +50,6 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         return total_work_time
 
     def get_work_time(self, point_period, now):
-
         logging.info(
             f'f=get_work_time, begin_time={point_period.begin_time}, end_time={point_period.end_time}, now={now} .')
 
@@ -61,7 +60,9 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
         logging.info(f'f=get_work_time, date_diff={date_diff}.')
 
-        time2 = time(date_diff.seconds // 3600, (date_diff.seconds // 60) % 60, date_diff.seconds % 60)
+        time2 = self.timedelta_to_time(date_diff)
+
+        # time2 = time(date_diff.seconds // 3600, (date_diff.seconds // 60) % 60, date_diff.seconds % 60)
 
         logging.info(f'f=get_work_time, time2={time2}.')
 
@@ -88,3 +89,9 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         logging.info(f'f=add_times, new_time={new_time}')
 
         return new_time
+
+    def timedelta_to_time(self, delta):
+        total_seconds = int(delta.total_seconds())
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return time(hours, minutes, seconds)

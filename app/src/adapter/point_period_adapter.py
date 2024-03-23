@@ -1,12 +1,6 @@
-import pytz
-
-from datetime import datetime
-
 from app.src.adapter.helper.database_helper import DatabaseHelper
 from app.src.core.domain.point_period import PointPeriod
 from app.src.util.singleton_meta import SingletonMeta
-
-now = datetime.now(pytz.timezone('America/Sao_Paulo'))
 
 
 class PointPeriodAdapter(metaclass=SingletonMeta):

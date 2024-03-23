@@ -101,7 +101,13 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
                          (time1.minute + time2.minute) * 60 + \
                          time1.second + time2.second
 
+        logging.info(f'f=add, total_seconds={total_seconds}')
+
         horas_resultantes, resto = divmod(total_seconds, 3600)
+
+        logging.info(f'f=add, horas_resultantes={horas_resultantes}')
+        logging.info(f'f=add, resto={resto}')
+
         minutos_resultantes, segundos_resultantes = divmod(resto, 60)
 
         return time(horas_resultantes, minutos_resultantes, segundos_resultantes)

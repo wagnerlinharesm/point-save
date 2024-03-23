@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, time
 
 from app.src.adapter.point_adapter import PointAdapter
@@ -17,6 +18,9 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             situation = next(filter(lambda element: element.description == 'FECHADO', situations))
             point_period.end_time = now.time()
             point_period.work_time = self.get_work_time(point_period, now)
+
+            logging.info(f'Work time: {point_period.work_time}')
+
             self._point_period_adapter.update(point_period)
         else:
             situation = next(filter(lambda element: element.description == 'ABERTO', situations))
@@ -41,18 +45,27 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         for point_period in point_periods:
             if total_work_time is None:
                 total_work_time = point_work_time
+                logging.info(f'total_work_time: {total_work_time}')
             else:
+                logging.info(f'total_work_time 2: {total_work_time}')
+                logging.info(f'work_time: {point_period.work_time}')
                 total_work_time = self.sum_times(total_work_time, point_period.work_time)
+                logging.info(f'total_work_time 3: {total_work_time}')
 
         return total_work_time
 
     def get_work_time(self, point_period, now):
+        logging.info(f'begin_time: {point_period.begin_time}')
+        logging.info(f'end_time: {point_period.end_time}')
+
         entry_date = datetime.combine(now, point_period.begin_time)
         exit_date = datetime.combine(now, point_period.end_time)
 
         date_diff = exit_date - entry_date
 
         time2 = self.timedelta_to_time(date_diff)
+
+        logging.info(f'time2: {time2}')
 
         return time2
 

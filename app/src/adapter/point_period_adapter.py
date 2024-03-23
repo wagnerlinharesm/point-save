@@ -64,7 +64,6 @@ class PointPeriodAdapter(metaclass=SingletonMeta):
             point_period.end_time,
             point_period.work_time,))
 
-
     def update(self, point_period):
         query = """
                 UPDATE periodo_ponto

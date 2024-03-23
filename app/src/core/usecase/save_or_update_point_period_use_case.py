@@ -19,6 +19,8 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
             point_period.end_time = now.time()
             point_period.work_time = self.get_work_time(point_period, now)
 
+            logging.info(f'begin_time: {point_period.begin_time}, end_time: {point_period.end_time}')
+
             logging.info(f'Work time: {point_period.work_time}')
 
             self._point_period_adapter.update(point_period)
@@ -34,25 +36,7 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
 
             self._point_period_adapter.save(point_period)
 
-        total_work_time = self.get_total_work_time(point_period, point.work_time)
-        self._point_adapter.update(point.point_id, situation.situation_id, total_work_time)
-
-    def get_total_work_time(self, point_period, point_work_time):
-        point_periods = self._point_period_adapter.fetch_all(point_period.point_id)
-
-        total_work_time = None
-
-        for point_period in point_periods:
-            if total_work_time is None:
-                total_work_time = point_work_time
-                logging.info(f'total_work_time: {total_work_time}')
-            else:
-                logging.info(f'total_work_time 2: {total_work_time}')
-                logging.info(f'work_time: {point_period.work_time}')
-                total_work_time = self.sum_times(total_work_time, point_period.work_time)
-                logging.info(f'total_work_time 3: {total_work_time}')
-
-        return total_work_time
+        self._point_adapter.update(point.point_id, situation.situation_id)
 
     def get_work_time(self, point_period, now):
         logging.info(f'begin_time: {point_period.begin_time}')

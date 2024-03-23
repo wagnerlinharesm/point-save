@@ -55,14 +55,3 @@ class SaveOrUpdatePointPeriodUseCase(metaclass=SingletonMeta):
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         return time(hours, minutes, seconds)
-
-    def sum_times(self, start_time, final_time):
-        total_seconds = (start_time.hour + final_time.hour) * 3600 + \
-                         (start_time.minute + final_time.minute) * 60 + \
-                         start_time.second + final_time.second
-
-        result_hours, resto = divmod(total_seconds, 3600)
-
-        result_minutes, result_seconds = divmod(resto, 60)
-
-        return time(result_hours, result_minutes, result_seconds)
